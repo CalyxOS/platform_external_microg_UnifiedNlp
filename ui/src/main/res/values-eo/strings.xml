@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2014, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="nlp_backend_action_configure">Agordi</string>
+    <string name="nlp_backend_action_about">Pri</string>
+</resources>

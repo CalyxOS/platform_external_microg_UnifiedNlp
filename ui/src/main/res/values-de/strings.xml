@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2014, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="nlp_backends_network_location">Module für Funknetz-basierte Ortung</string>
+    <string name="nlp_backends_geocoding">Module für Adressauflösung</string>
+
+    <string name="nlp_backend_action_configure">Konfigurieren</string>
+    <string name="nlp_backend_action_about">Infos</string>
+    <string name="nlp_backend_enable">Modul benutzen</string>
+    <string name="nlp_backend_description">Beschreibung</string>
+    <string name="nlp_backend_last_location">Letzte Ortung</string>
+</resources>
