@@ -37,7 +37,11 @@ class Preferences(private val context: Context) {
         }
         try {
             val str = getString(key, null)
-            if (str != null) return str.split("\\|".toRegex()).filter { it.isNotEmpty() }.toSet()
+            if (str != null) {
+                val stringSet = str.split("\\|".toRegex()).filter { it.isNotEmpty() }.toSet()
+                if (Build.VERSION.SDK_INT >= 11) preferences.edit().putStringSet(key, stringSet).apply()
+                return stringSet
+            }
         } catch (ignored: Exception) {
             // Ignore
         }
