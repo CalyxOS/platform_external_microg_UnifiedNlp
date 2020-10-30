@@ -53,11 +53,21 @@ class Preferences(private val context: Context) {
     }
 
     private fun getStringSetFromAny(key: String): Set<String>? {
+        migratePreference(key)
         val fromNewSettings = preferences.getStringSetCompat(key)
         if (fromNewSettings != null) return fromNewSettings
-        val fromOldSettings = oldPreferences.getStringSetCompat(key)
-        if (fromOldSettings != null) return fromOldSettings
         return systemDefaultPreferences?.getStringSetCompat(key)
+    }
+
+    private fun migratePreference(key: String): Set<String>? {
+        val fromOldSettings = oldPreferences.getStringSetCompat(key)
+        if (fromOldSettings != null) {
+            if (preferences.edit().putStringSetCompat(key, fromOldSettings).commit()) {
+                // Only delete the old preference once committed.
+                oldPreferences.edit().remove(key).apply()
+            }
+        }
+        return null
     }
 
     var locationBackends: Set<String>
