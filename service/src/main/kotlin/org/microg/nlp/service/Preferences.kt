@@ -53,11 +53,39 @@ class Preferences(private val context: Context) {
     }
 
     private fun getStringSetFromAny(key: String): Set<String>? {
+        migratePreference(key)
         val fromNewSettings = preferences.getStringSetCompat(key)
         if (fromNewSettings != null) return fromNewSettings
-        val fromOldSettings = oldPreferences.getStringSetCompat(key)
-        if (fromOldSettings != null) return fromOldSettings
         return systemDefaultPreferences?.getStringSetCompat(key)
+    }
+
+    private fun migratePreference(key: String): Set<String>? {
+        val fromOldSettings = oldPreferences.getStringSetCompat(key)
+        if (fromOldSettings != null) {
+            var newSettings: MutableSet<String> = mutableSetOf<String>()
+            for (oldBackend in fromOldSettings) {
+                // get pkg name and sha1
+                val parts = oldBackend.split("/".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
+                if (parts.size < 3) continue
+                val pkgName = parts[0]
+                val component = parts[1]
+                val oldSig = parts[2]
+                if (oldSig?.length != 40) continue
+                // get matching sha256
+                val sha1 = AbstractBackendHelper.firstSignatureDigest(context, pkgName, "SHA-1")
+                val sha256 = AbstractBackendHelper.firstSignatureDigest(context, pkgName, "SHA-256")
+                if (oldSig == sha1) {
+                    // generate set with sha256, and write
+                    val newBackend = "${pkgName}/${component}/${sha256}"
+                    newSettings.add(newBackend)
+                }
+            }
+             if (preferences.edit().putStringSetCompat(key, newSettings.toSet()).commit()) {
+                 // Only delete the old preference once committed.
+                 oldPreferences.edit().remove(key).apply()
+             }
+        }
+        return null
     }
 
     var locationBackends: Set<String>
