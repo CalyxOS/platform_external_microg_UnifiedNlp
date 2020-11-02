@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9b5be12_2ce5e66a",
+        "filename": "service/src/main/kotlin/org/microg/nlp/service/Preferences.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2020-11-02T20:29:07Z",
+      "side": 1,
+      "message": "Just noticed indentation is off here",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 14
+      },
+      "revId": "b4dd9227e87b5c8282c2d4043e4cff51ebfc28c6",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0",
+      "unresolved": true
+    }
+  ]
+}
