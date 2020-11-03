@@ -22,6 +22,30 @@
       "revId": "b4dd9227e87b5c8282c2d4043e4cff51ebfc28c6",
       "serverId": "35266860-6252-469c-a67d-185064479fc0",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c471d0be_62265c6c",
+        "filename": "service/src/main/kotlin/org/microg/nlp/service/Preferences.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2020-11-03T11:46:24Z",
+      "side": 1,
+      "message": "Yeah 😞\n\nMerged upstream already though, so I\u0027m not touching this.",
+      "parentUuid": "c9b5be12_2ce5e66a",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 14
+      },
+      "revId": "b4dd9227e87b5c8282c2d4043e4cff51ebfc28c6",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0",
+      "unresolved": false
     }
   ]
 }
