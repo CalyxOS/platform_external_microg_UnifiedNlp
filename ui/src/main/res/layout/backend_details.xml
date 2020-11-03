@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="org.microg.nlp.ui.model.BackendType" />
+
+        <variable
+            name="callbacks"
+            type="org.microg.nlp.ui.model.BackendDetailsCallback" />
+
+        <variable
+            name="entry"
+            type="org.microg.nlp.ui.model.BackendInfo" />
+
+        <variable
+            name="lastLocationString"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:paddingStart="?attr/listPreferredItemPaddingStart"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingTop="24dp"
+            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:onClick='@{() -> callbacks.onAppClicked(entry)}'
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:antialias="true"
+                    android:scaleType="fitCenter"
+                    android:src="@{entry.appIcon}"
+                    tools:src="@android:mipmap/sym_def_app_icon" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:ellipsize="marquee"
+                    android:gravity="center"
+                    android:singleLine="false"
+                    android:text='@{entry.name}'
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="20sp"
+                    tools:text="Mozilla Location Service" />
+
+                <TextView
+                    android:id="@+id/app_name"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text='@{entry.appName ?? ""}'
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:visibility='@{entry != null &amp;&amp; entry.appName == entry.name ? View.GONE : View.VISIBLE}'
+                    tools:text="Mozilla UnifiedNlp Backend" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:clickable="true"
+            android:enabled="@{entry.loaded}"
+            android:focusable="true"
+            android:gravity="center"
+            android:onClick="@{() -> callbacks.onEnabledChange(entry, !entry.enabled)}"
+            android:orientation="horizontal"
+            android:paddingStart="?attr/listPreferredItemPaddingStart"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            app:backgroundColorAttr="@{entry.enabled ? androidx.appcompat.R.attr.colorControlActivated : androidx.appcompat.R.attr.colorButtonNormal}"
+            tools:background="?attr/colorControlActivated">
+
+            <TextView
+                android:id="@+id/switch_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:paddingStart="56dp"
+                android:paddingLeft="56dp"
+                android:text="@string/nlp_backend_enable"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="?android:attr/textColorPrimaryInverse" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_widget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:checked="@{entry.enabled}"
+                android:enabled="@{entry.loaded || entry.enabled}"
+                app:onCheckedChangeListener="@{(view, checked) -> callbacks.onEnabledChange(entry, checked)}"
+                app:thumbTint="?android:attr/textColorPrimaryInverse"
+                app:trackTint="?android:attr/textColorSecondaryInverse"
+                tools:checked="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/settingsLauncher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:clipToPadding="false"
+            android:focusable="true"
+            android:gravity="start|center_vertical"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            android:onClick="@{() -> callbacks.onConfigureClicked(entry)}"
+            android:paddingStart="?attr/listPreferredItemPaddingStart"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:visibility='@{entry == null || entry.settingsIntent == null ? View.GONE : View.VISIBLE}'>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="56dp"
+                android:paddingLeft="56dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="@string/nlp_backend_action_configure"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/aboutLauncher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:clipToPadding="false"
+            android:focusable="true"
+            android:gravity="start|center_vertical"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            android:onClick="@{() -> callbacks.onAboutClicked(entry)}"
+            android:paddingStart="?attr/listPreferredItemPaddingStart"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:visibility='@{entry == null || entry.aboutIntent == null ? View.GONE : View.VISIBLE}'>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="56dp"
+                android:paddingLeft="56dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/about_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="@string/nlp_backend_action_about"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/dividerHorizontal"
+            android:visibility='@{entry == null || (entry.summary == null || entry.type != BackendType.LOCATION) || (entry.settingsIntent == null &amp;&amp; entry.aboutIntent == null) ? View.GONE : View.VISIBLE}'
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:gravity="start|center_vertical"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            android:paddingStart="?attr/listPreferredItemPaddingStart"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:visibility='@{entry == null || entry.summary == null ? View.GONE : View.VISIBLE}'>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="56dp"
+                android:paddingLeft="56dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+
+                <TextView
+                    android:id="@+id/description_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="@string/nlp_backend_description"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <TextView
+                    android:id="@+id/summary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/description_title"
+                    android:layout_alignStart="@id/description_title"
+                    android:layout_alignLeft="@id/description_title"
+                    android:maxLines="10"
+                    android:text='@{entry.summary ?? ""}'
+                    android:textAppearance="?attr/textAppearanceListItemSecondary"
+                    android:textColor="?android:attr/textColorSecondary"
+                    tools:text="Locate using Mozilla\'s online database" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:gravity="start|center_vertical"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            android:paddingStart="?attr/listPreferredItemPaddingStart"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:visibility='@{lastLocationString == null || lastLocationString == "" ? View.GONE : View.VISIBLE}'>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="56dp"
+                android:paddingLeft="56dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+
+                <TextView
+                    android:id="@+id/last_location_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="@string/nlp_backend_last_location"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <TextView
+                    android:id="@+id/last_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/last_location_title"
+                    android:layout_alignStart="@id/last_location_title"
+                    android:layout_alignLeft="@id/last_location_title"
+                    android:maxLines="10"
+                    android:text='@{lastLocationString ?? ""}'
+                    android:textAppearance="?attr/textAppearanceListItemSecondary"
+                    android:textColor="?android:attr/textColorSecondary"
+                    tools:text="Main St 23" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

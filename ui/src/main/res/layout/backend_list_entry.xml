@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="callbacks"
+            type="org.microg.nlp.ui.model.BackendListEntryCallback" />
+
+        <variable
+            name="entry"
+            type="org.microg.nlp.ui.model.BackendInfo" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:minHeight="?attr/listPreferredItemHeightSmall"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable='@{entry != null}'
+            android:clipToPadding="false"
+            android:focusable="true"
+            android:gravity="start|center_vertical"
+            android:onClick="@{() -> callbacks.onOpenDetails(entry)}"
+            android:paddingStart="?attr/listPreferredItemPaddingStart"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+            android:paddingRight="?attr/listPreferredItemPaddingRight">
+
+            <LinearLayout
+                android:id="@+id/icon_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:gravity="start|center_vertical"
+                android:minWidth="56dp"
+                android:orientation="horizontal"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@{entry.appIcon}"
+                    tools:src="@android:mipmap/sym_def_app_icon" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text='@{entry.name ?? @string/nlp_backends_none}'
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    tools:text="@tools:sample/lorem" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/two_target_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:visibility='@{entry == null ? View.GONE : View.VISIBLE}'
+            tools:visibility="visible">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/listDivider" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:minWidth="64dp"
+            android:orientation="vertical"
+            android:visibility='@{entry == null ? View.GONE : View.VISIBLE}'
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checked="@{entry.enabled}"
+                android:enabled="@{entry.loaded || entry.enabled}"
+                android:minWidth="80dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textOff=""
+                android:textOn=""
+                app:onCheckedChangeListener="@{(view, checked) -> callbacks.onEnabledChange(entry, checked)}"
+                tools:checked="true"
+                tools:text="&#8203;" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

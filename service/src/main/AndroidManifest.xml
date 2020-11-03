@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2019, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.microg.nlp.service">
+
+    <permission
+        android:name="org.microg.nlp.SERVICE_ADMIN"
+        android:label="Configure UnifiedNlp"
+        android:protectionLevel="privileged|signature" />
+
+    <uses-permission android:name="org.microg.nlp.SERVICE_ADMIN" />
+
+    <application>
+        <service
+            android:name=".UnifiedLocationServiceEntryPoint"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="org.microg.nlp.service.UnifiedLocationService" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".PackageChangedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

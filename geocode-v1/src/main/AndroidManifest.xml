@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2019, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.microg.nlp.geocode.v1">
+
+    <uses-permission
+        android:name="android.permission.INSTALL_LOCATION_PROVIDER"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application>
+        <uses-library android:name="com.android.location.provider" />
+
+        <service
+            android:name=".GeocodeService"
+            android:exported="true"
+            android:permission="android.permission.INTERNET">
+            <intent-filter>
+                <action android:name="com.android.location.service.GeocodeProvider" />
+                <action android:name="com.google.android.location.GeocodeProvider" />
+            </intent-filter>
+
+            <meta-data
+                android:name="serviceVersion"
+                android:value="2" />
+            <meta-data
+                android:name="serviceIsMultiuser"
+                android:value="false" />
+        </service>
+    </application>
+</manifest>
