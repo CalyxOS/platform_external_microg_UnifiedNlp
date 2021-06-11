@@ -21,7 +21,7 @@ class Preferences(private val context: Context) {
 
     private val systemDefaultPreferences: SharedPreferences?
         get() = try {
-            Context::class.java.getDeclaredMethod("getSharedPreferences", File::class.java, Int::class.javaPrimitiveType).invoke(context, File("/system/etc/microg.xml"), Context.MODE_PRIVATE) as SharedPreferences
+            Context::class.java.getDeclaredMethod("getSharedPreferences", File::class.java, Int::class.javaPrimitiveType).invoke(context, File("/product/etc/microg.xml"), Context.MODE_PRIVATE) as SharedPreferences
         } catch (e: java.lang.Exception) {
             null
         }
