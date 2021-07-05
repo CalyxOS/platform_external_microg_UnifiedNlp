@@ -16,6 +16,24 @@
       "message": "Need to send this upstream",
       "revId": "7669741b7c6b0f30096fb63048cd4083a7e2249e",
       "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b96819d_1ddfb8e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-07-05T23:04:44Z",
+      "side": 1,
+      "message": "Please do.",
+      "parentUuid": "55a8d3c0_135c82f7",
+      "revId": "7669741b7c6b0f30096fb63048cd4083a7e2249e",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
     }
   ]
 }
