@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e40d939d_a8bfe713",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-30T12:24:15Z",
+      "side": 1,
+      "message": "Needed after 5573: Sign all NLP APKs with our own key at build time | https://review.calyxos.org/c/CalyxOS/platform_prebuilts_calyx_microg/+/5573\n\nNot the finest code but it totally works!\n\nHope the comments are clear.\n\nTest:\n1. Install additional backends, just search for NLP on F-Droid\n2. Build with 5573, but without this change.\n3. Install build, you\u0027ll notice Mozilla and Dejavu are now off even if they were on before. Verify from shared_prefs/unified_nlp.xml, they\u0027ll have the old signatures there.\n4. adb install this-patch.apk\n5. They\u0027ll be back on, if you verify unified_nlp.xml, it\u0027ll have the new signatures.\n\nThis can then just get reverted in later builds since we\u0027re forcing everyone to upgrade to this build.",
+      "revId": "62ca01759a3a638432a3b66cbda19ac22e441ac9",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c1a87e3_97c4ec03",
+        "filename": "service/src/main/kotlin/org/microg/nlp/service/Preferences.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-30T12:24:15Z",
+      "side": 1,
+      "message": "These last two lines are the parts I\u0027m concerned about.\n\nIt was flipped for the previous migration (see above) since it was different files, so one could safely write to new first and delete the old one.\nIn this case it\u0027s the same file, so that\u0027s not possible.",
+      "revId": "62ca01759a3a638432a3b66cbda19ac22e441ac9",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    }
+  ]
+}
