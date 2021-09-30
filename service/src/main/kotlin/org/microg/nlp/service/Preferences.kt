@@ -54,6 +54,7 @@ class Preferences(private val context: Context) {
 
     private fun getStringSetFromAny(key: String): Set<String>? {
         migratePreference(key)
+        migrateSignature(key)
         val fromNewSettings = preferences.getStringSetCompat(key)
         if (fromNewSettings != null) return fromNewSettings
         return systemDefaultPreferences?.getStringSetCompat(key)
@@ -86,6 +87,40 @@ class Preferences(private val context: Context) {
                  // Only delete the old preference once committed.
                  oldPreferences.edit().remove(key).apply()
              }
+        }
+        return null
+    }
+
+    private fun migrateSignature(key: String): Set<String>? {
+        // Read system default xml
+        val fromSystemDefaults = systemDefaultPreferences?.getStringSetCompat(key)
+        // Read existing preferences, unified_nlp.xml
+        val fromSettings = preferences.getStringSetCompat(key)
+        // If both exist (migration not needed when settings or system files don't exist)
+        if (fromSettings != null && fromSystemDefaults != null) {
+            var newSettings: MutableSet<String> = mutableSetOf<String>()
+            for (settingsBackend in fromSettings) {
+                // Get package name and sha256
+                val parts = settingsBackend.split("/".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
+                if (parts.size < 3) continue // skip unsigned
+                val pkgName = parts[0]
+                val component = parts[1]
+                val oldSig = parts[2]
+                // Get the new sha256, direct from PackageManager
+                val sha256 = AbstractBackendHelper.firstSignatureDigest(context, pkgName, "SHA-256")
+                // Build backend entry with same package name and component, but new sha256
+                val newBackend = "${pkgName}/${component}/${sha256}"
+                // If this exists in system xml, we can write it to settings
+                // This is fine since it's a system app, the oldSig could only be the
+                // old signature and not anything else
+                if (fromSystemDefaults.contains(newBackend) && oldSig != sha256) newSettings.add(newBackend)
+                // If it doesn't, we just re-write the entry as-is to retain other packages
+                else newSettings.add(settingsBackend)
+            }
+            // We now have to delete the old preferences first
+            preferences.edit().remove(key).apply()
+            // So that we can write the new settings 🤞
+            preferences.edit().putStringSetCompat(key, newSettings.toSet()).commit()
         }
         return null
     }
