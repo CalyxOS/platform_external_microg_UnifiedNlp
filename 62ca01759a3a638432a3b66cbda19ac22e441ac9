@@ -33,6 +33,24 @@
       "message": "These last two lines are the parts I\u0027m concerned about.\n\nIt was flipped for the previous migration (see above) since it was different files, so one could safely write to new first and delete the old one.\nIn this case it\u0027s the same file, so that\u0027s not possible.",
       "revId": "62ca01759a3a638432a3b66cbda19ac22e441ac9",
       "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73d49f6c_b63b6006",
+        "filename": "service/src/main/kotlin/org/microg/nlp/service/Preferences.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-10-13T13:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c1a87e3_97c4ec03",
+      "revId": "62ca01759a3a638432a3b66cbda19ac22e441ac9",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
     }
   ]
 }
