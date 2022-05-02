@@ -6,8 +6,11 @@
 package org.microg.nlp.service
 
 import android.app.ActivityManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.*
+import android.content.IntentFilter
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.os.Bundle
@@ -104,6 +107,19 @@ class LocationRequestInternal(private var request: LocationRequest, private val 
 }
 
 class LocationServiceImpl(private val context: Context, private val lifecycle: Lifecycle) : ILocationService.Stub(), LifecycleOwner, LocationReceiver {
+    private val packageFilter: IntentFilter = IntentFilter().apply {
+        addAction(ACTION_PACKAGE_CHANGED)
+        addAction(ACTION_PACKAGE_REMOVED)
+        addAction(ACTION_PACKAGE_REPLACED)
+        addAction(ACTION_PACKAGE_RESTARTED)
+        addDataScheme("package")
+    }
+    private val packageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d(TAG, "Package updated, binding")
+            fuser.bind()
+        }
+    }
     private val requests = arrayListOf<LocationRequestInternal>()
     private val fuser = LocationFuser(context, lifecycle, this)
     private var lastLocation: Location? = null
@@ -119,6 +135,7 @@ class LocationServiceImpl(private val context: Context, private val lifecycle: L
             fuser.bind()
             fuser.update()
             Log.d(TAG, "Finished preparing LocationFuser")
+            context.registerReceiver(packageReceiver, packageFilter)
         }
     }
 
@@ -313,12 +330,13 @@ class LocationServiceImpl(private val context: Context, private val lifecycle: L
     }
 
     override fun reportLocation(location: Location) {
-        this.lastLocation = location
+        val newLocation = Location(location)
+        this.lastLocation = newLocation
         val requestsToDelete = hashSetOf<LocationRequestInternal>()
         synchronized(requests) {
             for (request in requests) {
                 try {
-                    request.report(context, location)
+                    request.report(context, newLocation)
                     if (request.updatesPending <= 0) requestsToDelete.add(request)
                 } catch (e: Exception) {
                     Log.w(TAG, "Removing request due to error: ", e)
@@ -331,8 +349,8 @@ class LocationServiceImpl(private val context: Context, private val lifecycle: L
     }
 
     fun dump(writer: PrintWriter?) {
-        writer?.println("Last reported location: $lastLocation")
-        writer?.println("Current location interval: $interval")
+        writer?.println("last location: $lastLocation")
+        writer?.println("interval: $interval")
         writer?.println("${requests.size} requests:")
         for (request in requests) {
             writer?.println("  ${request.id} package=${request.packageName} source=${request.source} interval=${request.interval} pending=${request.updatesPending}")
@@ -341,6 +359,7 @@ class LocationServiceImpl(private val context: Context, private val lifecycle: L
     }
 
     fun destroy() {
+        context.unregisterReceiver(packageReceiver)
         fuser.destroy()
     }
 
