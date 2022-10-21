@@ -64,7 +64,7 @@ List of backends for geolocation:
 * [MozillaNlpBackend](https://github.com/microg/IchnaeaNlpBackend) - Uses the Mozilla Location Service to resolve user location. The coverage is OK. Only the cell tower database is free.
 * [LocalWifiNlpBackend](https://github.com/n76/wifi_backend) - Local location provider for Wi-Fi APs using on-phone generated database.
 * [LocalGSMLocationProvider](https://github.com/rtreffer/LocalGSMLocationProvider) - Local opencellid based location provider backend. Has been surpassed by LocalGSMBackend which also has an OpenCellID option - *Last update in 2014*
-* [LocalGSMBackend](https://github.com/n76/Local-GSM-Backend) - Local location provider for GSM cells. It works offline by downloading freely licensed database files from Mozilla, OpenCellID, or lacells.db.
+* [LocalGSMBackend](https://gitlab.com/deveee/Local-GSM-Backend) - Local location provider for GSM cells. It works offline by downloading freely licensed database files from Mozilla, OpenCellID, or lacells.db.
 
 List of backends for (reverse) geocoding:
 * [NominatimGeocoderBackend](https://github.com/microg/NominatimGeocoderService) - Address lookup backend.
@@ -98,7 +98,7 @@ Some components: Copyright (C) 2013 The Android Open Source Project
 
 License
 -------
-    Copyright (C) 2013-2019 microG Project Team
+    Copyright (C) 2013-2022 microG Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
