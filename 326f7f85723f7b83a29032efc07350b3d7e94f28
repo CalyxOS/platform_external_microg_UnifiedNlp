@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e276ee60_27b7e96f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-04-19T17:01:28Z",
+      "side": 1,
+      "message": "https://github.com/microg/GmsCore/commit/f5ad796b827de2993153c4459e582c4c9037f7b6 No longer useful with this",
+      "revId": "326f7f85723f7b83a29032efc07350b3d7e94f28",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    }
+  ]
+}
